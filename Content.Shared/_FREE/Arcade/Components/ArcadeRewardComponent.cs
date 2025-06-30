@@ -2,6 +2,11 @@ using Content.Shared.EntityTable.EntitySelectors;
 
 namespace Content.Shared.FREE.Arcade.Components;
 
+/// <summary>
+///     Represents the reward pool that an arcade machine can hold.
+///     Arcade machines have a limited number of prizes they can dispense, and
+///     prizes are dispensed when a game signals that it has been won.
+/// </summary>
 [RegisterComponent]
 public sealed partial class ArcadeRewardComponent : Component
 {
