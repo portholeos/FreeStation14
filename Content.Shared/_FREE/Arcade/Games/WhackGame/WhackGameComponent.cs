@@ -2,6 +2,18 @@ using Content.Shared.FREE.Arcade.Systems;
 
 namespace Content.Shared.FREE.Arcade.Games.WhackGame;
 
+/// <summary>
+///     Component representing the various variables in a Whacker Game machine.
+///     Note: Most "constant" or "data" variables should go in this component!
+///     Dynamically-changing variables related to the game state (such as time,
+///     score, or difficulty) are stored on the WhackGame class. This is better
+///     for dynamically changing the variables of the game in testing to really
+///     fine-tune the game's difficulty.
+///
+///     Note that these variables should not change in-game via means besides
+///     VV, otherwise it could lead to unexpected and potentially undesirable
+///     results, namely if the game is updated while it is being played.
+/// </summary>
 [RegisterComponent]
 [Access(typeof(SharedArcadeSystem), Friend = AccessPermissions.Read)]
 public sealed partial class WhackGameComponent : Component

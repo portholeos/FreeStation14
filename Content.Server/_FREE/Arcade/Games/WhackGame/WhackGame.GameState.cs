@@ -50,6 +50,11 @@ public sealed partial class WhackGame
         InitializeTargets();
     }
 
+    /// <summary>
+    ///     Updates the game progression by one frame.
+    /// </summary>
+    /// <param name="frameTime">How much time has elapsed since the previous frame.</param>
+    /// <returns>Whether the game should continue.</returns>
     public bool Update(float frameTime)
     {
         if (_timing.CurTime > EndTime)
