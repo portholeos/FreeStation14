@@ -5,7 +5,7 @@ using Content.Shared.FREE.Arcade.Systems;
 
 namespace Content.Server.FREE.Arcade.Systems;
 
-public sealed partial class ArcadeSystem : SharedArcadeSystem
+public sealed partial class ArcadeSystem
 {
     [Dependency] private readonly EntityTableSystem _entityTable = default!;
 
