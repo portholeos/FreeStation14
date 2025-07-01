@@ -40,8 +40,6 @@ public sealed partial class WhackGame
 
     private void InitializeTargets()
     {
-        TargetDuration = TimeSpan.FromSeconds(Comp.StartingTargetDuration);
-        TargetFrequency = TimeSpan.FromSeconds(Comp.StartingTargetFrequency);
         _availablePositions = Enumerable.Range(0, Comp.PositionCount).ToList();
         UpdateTargetDifficulty();
     }
