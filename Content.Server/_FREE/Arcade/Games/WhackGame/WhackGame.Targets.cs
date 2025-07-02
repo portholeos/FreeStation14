@@ -40,8 +40,17 @@ public sealed partial class WhackGame
 
     private void InitializeTargets()
     {
-        _availablePositions = Enumerable.Range(0, Comp.PositionCount).ToList();
+        _availablePositions = Enumerable.Range(0, Comp.TargetCount).ToList();
         UpdateTargetDifficulty();
+    }
+
+    public void HitTarget(int position)
+    {
+        if (!_currentTargets.TryGetValue(position, out var targetData))
+            return;
+
+        Score += targetData.Item1.Score;
+        RemoveTarget(position);
     }
 
     /// <summary>

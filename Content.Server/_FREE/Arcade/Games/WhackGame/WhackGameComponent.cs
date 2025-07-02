@@ -1,6 +1,6 @@
-using Content.Shared.FREE.Arcade.Systems;
+using Content.Shared.FREE.Arcade.Games.WhackGame;
 
-namespace Content.Shared.FREE.Arcade.Games.WhackGame;
+namespace Content.Server.FREE.Arcade.Games.WhackGame;
 
 /// <summary>
 ///     Component representing the various variables in a Whacker Game machine.
@@ -15,20 +15,19 @@ namespace Content.Shared.FREE.Arcade.Games.WhackGame;
 ///     results, namely if the game is updated while it is being played.
 /// </summary>
 [RegisterComponent]
-[Access(typeof(SharedArcadeSystem), Friend = AccessPermissions.Read)]
-public sealed partial class WhackGameComponent : Component
+public sealed partial class WhackGameArcadeComponent : SharedWhackGameArcadeComponent
 {
-    /// <summary>
-    ///     List of all possible targets that can spawn.
-    /// </summary>
-    [DataField(required: true)]
-    public List<WhackTarget> Targets = new();
+    [ViewVariables]
+    public WhackGame? Game = null;
+
+    [ViewVariables]
+    public WhackGameState State = WhackGameState.MainMenu;
 
     /// <summary>
     ///     How many possible target positions there are to hit.
     /// </summary>
     [DataField]
-    public int PositionCount = 6;
+    public int TargetCount = 6;
 
     // How long a game session lasts.
     [DataField]

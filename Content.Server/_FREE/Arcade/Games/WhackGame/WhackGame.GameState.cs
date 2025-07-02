@@ -9,7 +9,7 @@ public sealed partial class WhackGame
 {
     [Dependency] private readonly IGameTiming _timing = default!;
 
-    public readonly WhackGameComponent Comp;
+    public readonly WhackGameArcadeComponent Comp;
 
     /// <summary>
     ///     When the game is supposed to end.
@@ -38,7 +38,7 @@ public sealed partial class WhackGame
 
     [ViewVariables(VVAccess.ReadOnly)] public TimeSpan TimeLeft => EndTime - _timing.CurTime;
 
-    public WhackGame(WhackGameComponent component)
+    public WhackGame(WhackGameArcadeComponent component)
     {
         IoCManager.InjectDependencies(this);
 
