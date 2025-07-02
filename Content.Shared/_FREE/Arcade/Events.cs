@@ -7,11 +7,11 @@ namespace Content.Shared.FREE.Arcade;
 /// </summary>
 /// <param name="player">The entity playing the arcade game.</param>
 /// <param name="result">The result of the game.</param>
-public sealed class ArcadeGameEndedEvent(EntityUid player,
+public sealed class ArcadeGameEndedEvent(EntityUid? player,
     ArcadeGameResult result = ArcadeGameResult.Forfeit)
     : EntityEventArgs
 {
-    public EntityUid Player = player;
+    public EntityUid? Player = player;
     public ArcadeGameResult Result = result;
 }
 

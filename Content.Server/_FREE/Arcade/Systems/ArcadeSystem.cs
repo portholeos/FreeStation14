@@ -12,7 +12,7 @@ public sealed partial class ArcadeSystem : SharedArcadeSystem
     /// <param name="player">The entity playing the game.</param>
     /// <param name="machine">The arcade machine entity.</param>
     [PublicAPI]
-    public void WinGame(EntityUid player, EntityUid machine)
+    public void WinGame(EntityUid? player, EntityUid machine)
     {
         FinishGame(player, machine, ArcadeGameResult.Win);
     }
@@ -23,7 +23,7 @@ public sealed partial class ArcadeSystem : SharedArcadeSystem
     /// <param name="player">The entity playing the game.</param>
     /// <param name="machine">The arcade machine entity.</param>
     [PublicAPI]
-    public void LoseGame(EntityUid player, EntityUid machine)
+    public void LoseGame(EntityUid? player, EntityUid machine)
     {
         FinishGame(player, machine, ArcadeGameResult.Fail);
     }
@@ -34,7 +34,7 @@ public sealed partial class ArcadeSystem : SharedArcadeSystem
     /// <param name="player">The entity playing the game.</param>
     /// <param name="machine">The arcade machine entity.</param>
     [PublicAPI]
-    public void LeaveGame(EntityUid player, EntityUid machine)
+    public void LeaveGame(EntityUid? player, EntityUid machine)
     {
         FinishGame(player, machine, ArcadeGameResult.Forfeit);
     }
@@ -45,17 +45,18 @@ public sealed partial class ArcadeSystem : SharedArcadeSystem
     /// <param name="player">The entity playing the game.</param>
     /// <param name="machine">The arcade machine entity.</param>
     [PublicAPI]
-    public void DrawGame(EntityUid player, EntityUid machine)
+    public void DrawGame(EntityUid? player, EntityUid machine)
     {
         FinishGame(player, machine, ArcadeGameResult.Draw);
     }
 
-    private void FinishGame(EntityUid player, EntityUid machine, ArcadeGameResult result)
+    private void FinishGame(EntityUid? player, EntityUid machine, ArcadeGameResult result)
     {
         var endedEvent = new ArcadeGameEndedEvent(player, result);
         var finishEvent = new FinishedArcadeGameEvent(result);
 
         RaiseLocalEvent(machine, endedEvent);
-        RaiseLocalEvent(player, finishEvent);
+        if (player != null)
+            RaiseLocalEvent(player.Value, finishEvent);
     }
 }
