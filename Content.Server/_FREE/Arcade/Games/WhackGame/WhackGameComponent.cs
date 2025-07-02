@@ -20,14 +20,11 @@ public sealed partial class WhackGameArcadeComponent : SharedWhackGameArcadeComp
     [ViewVariables]
     public WhackGame? Game = null;
 
-    [ViewVariables]
-    public WhackGameState State = WhackGameState.MainMenu;
-
     /// <summary>
-    ///     How many possible target positions there are to hit.
+    ///     List of all possible targets that can spawn.
     /// </summary>
-    [DataField]
-    public int TargetCount = 6;
+    [DataField(required: true)]
+    public List<WhackTarget> Targets = new();
 
     // How long a game session lasts.
     [DataField]
