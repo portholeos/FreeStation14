@@ -1,11 +1,9 @@
 using System.Linq;
-using Content.Shared.FREE.Arcade.Games.WhackGame;
-using Robust.Shared.Random;
 using Robust.Shared.Timing;
 
-namespace Content.Server.FREE.Arcade.Games.WhackGame;
+namespace Content.Shared.FREE.Arcade.Games.WhackGame;
 
-public sealed partial class WhackGame
+public sealed partial class WhackGameData
 {
     [Dependency] private readonly IGameTiming _timing = default!;
 
@@ -44,7 +42,7 @@ public sealed partial class WhackGame
 
     public event Action<WhackGameArcadeGameUIState>? OnUIUpdate;
 
-    public WhackGame(WhackGameArcadeComponent component)
+    public WhackGameData(WhackGameArcadeComponent component)
     {
         IoCManager.InjectDependencies(this);
 

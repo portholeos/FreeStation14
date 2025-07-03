@@ -2,9 +2,9 @@ using System.Linq;
 using Content.Shared.FREE.Arcade.Games.WhackGame;
 using Robust.Shared.Random;
 
-namespace Content.Server.FREE.Arcade.Games.WhackGame;
+namespace Content.Shared.FREE.Arcade.Games.WhackGame;
 
-public sealed partial class WhackGame
+public sealed partial class WhackGameData
 {
     [Dependency] private readonly IRobustRandom _random = default!;
 
