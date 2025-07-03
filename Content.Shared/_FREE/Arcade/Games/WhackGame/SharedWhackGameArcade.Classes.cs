@@ -21,18 +21,28 @@ public enum WhackGamePlayerAction
 {
     WhackTarget,
     StartGame,
-    ReturnToMenu,
+    RequestData,
 }
 
+/// <summary>
+///     Updates the current state of the game.
+/// </summary>
 [Serializable, NetSerializable]
-public enum WhackGameState
+public sealed class WhackGameArcadeGameUIState : BoundUserInterfaceState
 {
-    MainMenu,
-    Game,
-    GameOver,
-}
+    public readonly int Score;
+    public readonly int TimeLeft;
+    public readonly Dictionary<int, WhackTarget> ActiveTargets;
+    public readonly bool EndGame = false;
 
-[Serializable, NetSerializable, Virtual]
-public class WhackGameArcadeUpdateMessage : BoundUserInterfaceMessage
-{
+    public WhackGameArcadeGameUIState(int score,
+        int timeLeft,
+        Dictionary<int, WhackTarget> targets,
+        bool endGame = false)
+    {
+        Score = score;
+        TimeLeft = timeLeft;
+        ActiveTargets = targets;
+        EndGame = endGame;
+    }
 }
