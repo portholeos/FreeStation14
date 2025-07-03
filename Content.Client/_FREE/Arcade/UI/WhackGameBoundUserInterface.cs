@@ -22,7 +22,7 @@ public sealed class WhackGameBoundUserInterface : BoundUserInterface
 
         _menu = this.CreateWindow<WhackGameMenu>();
 
-        if (_entity.TryGetComponent<WhackGameComponent>(Owner, out var game))
+        if (_entity.TryGetComponent<WhackGameArcadeComponent>(Owner, out var game))
             _menu.TargetCount = game.TargetCount;
 
         _menu.OnPlayerAction += SendAction;
