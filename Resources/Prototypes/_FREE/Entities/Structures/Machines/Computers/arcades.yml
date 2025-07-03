@@ -18,16 +18,16 @@
     - type: WhackGameArcade
       targetCount: 6
       targets:
-      - sprite:
-          sprite: Structures/Machines/arcade.rsi
-          state: icon
-        score: 1
-        friendly: false
-      - sprite:
-          sprite: Structures/Machines/arcade.rsi
-          state: icon
-        score: -2
-        friendly: true
+        - sprite:
+            sprite: Structures/Machines/arcade.rsi
+            state: icon
+          score: 1
+          friendly: false
+        - sprite:
+            sprite: Structures/Machines/arcade.rsi
+            state: icon
+          score: -1
+          friendly: true
     - type: ArcadeReward
       possibleRewards: !type:NestedSelector
         tableId: AllPlushiesTable
