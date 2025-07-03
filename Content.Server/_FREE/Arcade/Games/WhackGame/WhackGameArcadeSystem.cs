@@ -47,7 +47,7 @@ public sealed partial class WhackGameArcadeSystem : SharedWhackGameArcadeSystem
         game.EndGame();
         var performance = game.GetPerformance();
 
-        if (performance >= 0.7f) // C's get degrees
+        if (performance >= 0.65f) // C's get degrees
             _arcade.WinGame(null, ent.Owner);
 
         game.UpdateUI(true);
