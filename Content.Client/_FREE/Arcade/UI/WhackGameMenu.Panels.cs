@@ -1,15 +1,21 @@
+using Content.Client.Resources;
 using Robust.Client.Graphics;
+using Robust.Client.ResourceManagement;
 using Robust.Client.UserInterface.Controls;
 
 namespace Content.Client.FREE.Arcade.UI;
 
 public sealed partial class WhackGameMenu
 {
+    [Dependency] private readonly IResourceCache _resourceCache = default!;
+
     private readonly LocId _mainMenuTitle = "whackgame-menu-mainmenu-title";
     private readonly LocId _startButtonText = "whackgame-menu-mainmenu-start-game";
     private readonly LocId _finalScoreText = "whackgame-menu-gameover-score-text";
     private readonly LocId _finalScoreValue = "whackgame-menu-gameover-score-value";
     private readonly LocId _backToMenuText = "whackgame-menu-gameover-back-to-menu-button";
+    private const string TitleFontPath = "/Fonts/NotoSans/NotoSans-Regular.ttf";
+    private const int TitleFontSize = 20;
 
     private PanelContainer? _menuPanel;
     private PanelContainer? _gameOverPanel;
@@ -30,11 +36,15 @@ public sealed partial class WhackGameMenu
         if (_menuPanel == null)
             return;
 
+        _menuPanel.RemoveAllChildren();
         var titleMargin = new Thickness(0, 0, 0, 20);
+        var font = _resourceCache.GetFont(TitleFontPath, TitleFontSize);
         var titleLabel = new Label()
         {
             Text = Loc.GetString(_mainMenuTitle),
-            Margin = titleMargin
+            Margin = titleMargin,
+            Align = Label.AlignMode.Center,
+            FontOverride = font,
         };
 
         var startButton = new Button() { Text = Loc.GetString(_startButtonText), };
@@ -57,6 +67,7 @@ public sealed partial class WhackGameMenu
         if (_gameOverPanel == null)
             return;
 
+        _gameOverPanel.RemoveAllChildren();
         var finalScoreTextLabel = new Label()
         {
             Text = Loc.GetString(_finalScoreText),
@@ -87,13 +98,15 @@ public sealed partial class WhackGameMenu
 
     private PanelContainer CreateOverlayPanel()
     {
+        var margin = new Thickness(0f, _topBarHeight, 0f, 0f);
         var styleBox = new StyleBoxFlat();
-        styleBox.BackgroundColor = Color.Black.WithAlpha(0.75f);
+        styleBox.BackgroundColor = Color.Black.WithAlpha(0.6f);
 
         var panel = new PanelContainer()
         {
             MouseFilter = MouseFilterMode.Stop,
-            PanelOverride = styleBox
+            PanelOverride = styleBox,
+            Margin = margin,
         };
 
         AddChild(panel);

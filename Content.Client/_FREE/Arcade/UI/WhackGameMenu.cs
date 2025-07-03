@@ -10,12 +10,14 @@ public sealed partial class WhackGameMenu : DefaultWindow
     private readonly Vector2 _windowSize = new Vector2(450, 300);
     private readonly LocId _windowTitle = "whackgame-menu-title";
     private BoxContainer? _gameBox;
+    private float _topBarHeight;
     public event Action<WhackGamePlayerAction, int?>? OnPlayerAction;
 
     public int TargetCount = 0;
 
     public WhackGameMenu()
     {
+        IoCManager.InjectDependencies(this);
         InitializeWindowProperties();
     }
 
@@ -23,6 +25,7 @@ public sealed partial class WhackGameMenu : DefaultWindow
     {
         Title = Loc.GetString(_windowTitle);
         MinSize = SetSize = _windowSize;
+        _topBarHeight = WindowHeader.MinSize.Y;
     }
 
     public void PopulateWindow()
@@ -37,9 +40,7 @@ public sealed partial class WhackGameMenu : DefaultWindow
 
     private void CreateGameBox()
     {
-        var topMargin = WindowHeader.MinSize.Y;
-        var margin = new Thickness(0f, topMargin, 0f, 0f);
-
+        var margin = new Thickness(0f, _topBarHeight, 0f, 0f);
         var box = new BoxContainer()
         {
             HorizontalExpand = true,

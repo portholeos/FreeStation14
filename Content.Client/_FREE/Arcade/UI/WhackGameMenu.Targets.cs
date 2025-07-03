@@ -1,5 +1,5 @@
+using Content.Client.Stylesheets;
 using Content.Shared.FREE.Arcade.Games.WhackGame;
-using Robust.Client.UserInterface;
 using Robust.Client.UserInterface.Controls;
 using Robust.Shared.Utility;
 
@@ -77,7 +77,15 @@ public sealed partial class WhackGameMenu
 
     private void UpdateTarget(Button targetButton, WhackTarget? targetData)
     {
-        // TODO: Interpolate this if it is JUST being changed
-        targetButton.Disabled = targetData == null;
+        var newValue = targetData == null;
+        if (newValue == targetButton.Disabled)
+            return;
+
+        targetButton.Disabled = newValue;
+
+        if (targetData?.Friendly == true)
+            targetButton.AddStyleClass(StyleNano.StyleClassButtonColorGreen);
+        else
+            targetButton.RemoveStyleClass(StyleNano.StyleClassButtonColorGreen);
     }
 }
