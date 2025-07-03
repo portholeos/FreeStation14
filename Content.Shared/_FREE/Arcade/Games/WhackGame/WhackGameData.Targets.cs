@@ -85,7 +85,7 @@ public sealed partial class WhackGameData
 
     private void UpdateTargetDifficulty()
     {
-        var difficultyScale = Math.Clamp(Difficulty, 0f, 100f);
+        var difficultyScale = Math.Clamp(Difficulty / Comp.DifficultyCurveEnd, 0f, 1.0f);
         var inverseDifficulty = 1f - difficultyScale;
 
         var bonusTargetSpawn = (int)(Difficulty / Comp.SpawnCountThreshold);
