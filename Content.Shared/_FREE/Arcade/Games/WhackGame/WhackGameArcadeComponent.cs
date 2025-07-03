@@ -24,7 +24,7 @@ public sealed partial class WhackGameArcadeComponent : Component
 
     // How long a game session lasts.
     [DataField]
-    public TimeSpan GameDuration = TimeSpan.FromSeconds(120);
+    public TimeSpan GameDuration = TimeSpan.FromSeconds(90);
 
     /// <summary>
     ///     Target Frequency is how frequently targets spawn.
@@ -36,19 +36,19 @@ public sealed partial class WhackGameArcadeComponent : Component
     ///     Lowest possible spawning frequency, in seconds.
     /// </summary>
     [DataField]
-    public float MinTargetFrequency = 0.4f;
+    public float MinTargetFrequency = 0.8f;
 
     /// <summary>
     ///     Target Duration is how long a target lasts before disappearing.
     /// </summary>
     [DataField]
-    public float StartingTargetDuration = 2.5f;
+    public float StartingTargetDuration = 3.0f;
 
     /// <summary>
     ///     Lowest possible duration a target can have, in seconds.
     /// </summary>
     [DataField]
-    public float MinTargetDuration = 0.5f;
+    public float MinTargetDuration = 1.0f;
 
     /// <summary>
     ///     Minimum difficulty needed for "friendly" targets to start spawning.
@@ -60,16 +60,16 @@ public sealed partial class WhackGameArcadeComponent : Component
     ///     Maximum difficulty for friend target chance to stop increasing.
     /// </summary>
     [DataField]
-    public float FriendChanceIncreaseEnd = 120f;
+    public float FriendChanceIncreaseEnd = 90f;
 
     /// <summary>
     ///     The chance that a target should be a friend target when <see cref="FriendChanceIncreaseEnd"/> is reached.
     /// </summary>
     [DataField]
-    public float FriendChanceTarget = 0.4f;
+    public float FriendChanceTarget = 0.3f;
 
     /// <summary>
-    ///     Minimum possible "friendly" spawn chance a target can have.
+    ///     Minimum possible "friend" spawn chance a target can have.
     /// </summary>
     [DataField]
     public float MinFriendChance = 0.0f;
@@ -78,7 +78,7 @@ public sealed partial class WhackGameArcadeComponent : Component
     ///     The maximum possible friend spawn chance.
     /// </summary>
     [DataField]
-    public float MaxFriendChance = 0.5f;
+    public float MaxFriendChance = 0.4f;
 
     /// <summary>
     ///     Every time Difficulty increases by this threshold, another maximum target spawn is added.
@@ -86,13 +86,13 @@ public sealed partial class WhackGameArcadeComponent : Component
     ///     Once you reach 20 difficulty, it would increase to 1 + 2 = 3 max targets.
     /// </summary>
     [DataField]
-    public float SpawnCountThreshold = 30.0f;
+    public float SpawnCountThreshold = 18.0f;
 
     /// <summary>
     ///     Maximum number of targets that can spawn at a time.
     /// </summary>
     [DataField]
-    public int MaxTargetSpawns = 4;
+    public int MaxTargetSpawns = 5;
 
     /// <summary>
     ///     "Difficulty" determines how fast targets spawn and disappear.
@@ -105,4 +105,10 @@ public sealed partial class WhackGameArcadeComponent : Component
     /// </summary>
     [DataField]
     public float DifficultyRate = 1.0f;
+
+    /// <summary>
+    ///     The difficulty at which Frequency/Duration are multiplied by zero.
+    /// </summary>
+    [DataField]
+    public float DifficultyCurveEnd = 90f;
 }
