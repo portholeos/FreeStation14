@@ -45,11 +45,13 @@ public sealed partial class WhackGameArcadeSystem : SharedWhackGameArcadeSystem
             return;
 
         game.EndGame();
-        var score = game.Score;
         var performance = game.GetPerformance();
 
         if (performance >= 0.7f) // C's get degrees
             _arcade.WinGame(null, ent.Owner);
+
+        game.UpdateUI(true);
+        ent.Comp.Game = null;
     }
 
     private void OnPlayerAction(Entity<WhackGameArcadeComponent> ent, ref WhackGameArcadePlayerActionMessage args)
@@ -61,17 +63,18 @@ public sealed partial class WhackGameArcadeSystem : SharedWhackGameArcadeSystem
         {
             case WhackGamePlayerAction.StartGame:
                 {
-                    if (ent.Comp.State != WhackGameState.Game)
+                    if (ent.Comp.Game != null)
                         break;
 
-                    ent.Comp.Game ??= new(ent.Comp);
-                    ent.Comp.State = WhackGameState.Game;
+                    var newGame = new WhackGame(ent.Comp);
+                    ent.Comp.Game = newGame;
+                    newGame.OnUIUpdate += s => UpdateState(ent, s);
+                    newGame.UpdateUI();
                     break;
                 }
             case WhackGamePlayerAction.WhackTarget:
                 {
-                    if (ent.Comp.State != WhackGameState.Game
-                        || ent.Comp.Game == null
+                    if (ent.Comp.Game == null
                         || args.Target == null
                         || args.Target < 0
                         || args.Target >= ent.Comp.TargetCount)
@@ -80,12 +83,9 @@ public sealed partial class WhackGameArcadeSystem : SharedWhackGameArcadeSystem
                     ent.Comp.Game.HitTarget(args.Target.Value);
                     break;
                 }
-            case WhackGamePlayerAction.ReturnToMenu:
+            case WhackGamePlayerAction.RequestData:
                 {
-                    if (ent.Comp.State != WhackGameState.GameOver)
-                        break;
-
-                    ent.Comp.State = WhackGameState.MainMenu;
+                    ent.Comp.Game?.UpdateUI();
                     break;
                 }
         }
@@ -97,6 +97,15 @@ public sealed partial class WhackGameArcadeSystem : SharedWhackGameArcadeSystem
             return;
 
         _uiSystem.CloseUi(ent.Owner, WhackGameArcadeUiKey.Key);
+    }
+
+    private void UpdateState(Entity<WhackGameArcadeComponent> ent, WhackGameArcadeGameUIState state)
+    {
+        if (!TryComp<UserInterfaceComponent>(ent.Owner, out var uiState))
+            return;
+
+        var uiEnt = new Entity<UserInterfaceComponent?>(ent.Owner, uiState);
+        _uiSystem.SetUiState(uiEnt, WhackGameArcadeUiKey.Key, state);
     }
 
     private bool IsPowered(Entity<WhackGameArcadeComponent> ent)

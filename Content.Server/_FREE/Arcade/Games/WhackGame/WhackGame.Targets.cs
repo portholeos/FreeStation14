@@ -46,11 +46,14 @@ public sealed partial class WhackGame
 
     public void HitTarget(int position)
     {
+        if (GameEnded)
+            return;
         if (!_currentTargets.TryGetValue(position, out var targetData))
             return;
 
         Score += targetData.Item1.Score;
         RemoveTarget(position);
+        UpdateUI();
     }
 
     /// <summary>
@@ -58,19 +61,26 @@ public sealed partial class WhackGame
     ///     This order of operations means that, for example, a target cannot appear in a position
     ///     in the same "cycle" that it has been freed up.
     /// </summary>
-    private void UpdateTargets()
+    private void UpdateTargets(ref bool updateState)
     {
         UpdateTargetDifficulty();
 
         if (_timing.CurTime >= NextTargetSpawn)
+        {
             SpawnTargetWave();
+            updateState = true;
+        }
 
         var targetsToRemove = _currentTargets
             .Where(t => _timing.CurTime > t.Value.Item2)
             .Select(t => t.Key);
 
-        foreach (var position in targetsToRemove)
-            RemoveTarget(position);
+        if (targetsToRemove.Count() > 0)
+        {
+            foreach (var position in targetsToRemove)
+                RemoveTarget(position);
+            updateState = true;
+        }
     }
 
     private void UpdateTargetDifficulty()
