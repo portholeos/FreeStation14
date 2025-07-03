@@ -66,7 +66,7 @@ public sealed partial class WhackGameArcadeSystem : SharedWhackGameArcadeSystem
                     if (ent.Comp.Game != null)
                         break;
 
-                    var newGame = new WhackGame(ent.Comp);
+                    var newGame = new WhackGameData(ent.Comp);
                     ent.Comp.Game = newGame;
                     newGame.OnUIUpdate += s => UpdateState(ent, s);
                     newGame.UpdateUI();

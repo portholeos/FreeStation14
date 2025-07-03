@@ -1,5 +1,3 @@
-
-using Content.Client.FREE.Arcade.Games;
 using Content.Shared.FREE.Arcade.Games.WhackGame;
 using Robust.Client.UserInterface;
 
