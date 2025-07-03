@@ -1,6 +1,6 @@
 - type: entity
   id: ArcadeWhackGame
-  name: whacker game arcade
+  name: bonk-a-critter arcade
   parent: ArcadeBase
   components:
     - type: Sprite
@@ -15,108 +15,41 @@
           visible: false
     - type: PointLight
       color: "#e3a136"
-    - type: SpaceVillainArcade
-      rewardMinAmount: 0
-      rewardMaxAmount: 0
-      possibleRewards:
-        - Basketball
-        - BalloonNT
-        - BalloonCorgi
-        - BoxDonkSoftBox
-        - BoxCartridgeCap
-        - BeachBall
-        - CandyBucket
-        - CrayonBox
-        - ClothingHeadHatCowboyRed
-        - FoamCrossbow
-        - FoamBlade
-        - FoamCutlass
-        - Football
-        - GlowstickBase #green
-        - GlowstickBlue
-        - GlowstickYellow
-        - GlowstickPurple
-        - GlowstickRed
-        - HarmonicaInstrument
-        - OcarinaInstrument
-        - RecorderInstrument
-        - GunpetInstrument
-        - BirdToyInstrument
-        - MysteryFigureBox
-        - PlushieHampter
-        - PlushieLizard
-        - PlushieRainbowLizard
-        - PlushieAtmosian
-        - PlushieSpaceLizard
-        - PlushieNuke
-        - PlushieCarp
-        - PlushieMagicarp
-        - PlushieHolocarp
-        - PlushieRainbowCarp
-        - PlushieRatvar
-        - PlushieNar
-        - PlushieSnake
-        - PlushieArachind
-        - PlushieMoth
-        - PlushieHampter
-        - PlushiePenguin
-        - PlushieHuman
-        - PlushieRouny
-        - PlushieBee
-        - PlushieSlime
-        - PlushieGhost
-        - PlushieDiona
-        - PlushieSharkBlue
-        - PlushieVox
-        - PlushieXeno
-        - PlasticBanana
-        - RevolverCapGun
-        - SnapPopBox
-        - ToyMouse
-        - ToyAi
-        - ToyNuke
-        - ToyGriffin
-        - ToyHonk
-        - ToyIan
-        - ToyMarauder
-        - ToyMauler
-        - ToyGygax
-        - ToyOdysseus
-        - ToyOwlman
-        - ToyDeathRipley
-        - ToyPhazon
-        - ToyFireRipley
-        - ToyReticence
-        - ToyRipley
-        - ToySeraph
-        - ToyDurand
-        - ToySkeleton
-        - ToySword
-        - ToyAmongPequeno
-        - ToyRubberDuck
-        - ToyHammer
-        - WeaponWaterPistol
-        - WhoopieCushion
-        - Whistle
+    - type: WhackGameArcade
+      targetCount: 6
+      targets:
+      - sprite:
+          sprite: Structures/Machines/arcade.rsi
+          state: icon
+        score: 1
+        friendly: false
+      - sprite:
+          sprite: Structures/Machines/arcade.rsi
+          state: icon
+        score: -2
+        friendly: true
+    - type: ArcadeReward
+      possibleRewards: !type:NestedSelector
+        tableId: AllPlushiesTable
     - type: WiresPanel
     - type: Wires
       layoutId: Arcade
       boardName: wires-board-name-arcade
     - type: ActivatableUI
-      key: enum.SpaceVillainArcadeUiKey.Key
+      key: enum.WhackGameArcadeUiKey.Key
     - type: ActivatableUIRequiresPower
     - type: StationAiWhitelist
     - type: UserInterface
       interfaces:
-        enum.SpaceVillainArcadeUiKey.Key:
-          type: SpaceVillainArcadeBoundUserInterface
+        enum.WhackGameArcadeUiKey.Key:
+          type: WhackGameBoundUserInterface
         enum.WiresUiKey.Key:
           type: WiresBoundUserInterface
-    - type: Computer
-      board: SpaceVillainArcadeComputerCircuitboard
+    # - type: Computer
+    #   board: SpaceVillainArcadeComputerCircuitboard
     - type: Advertise
       pack: SpaceVillainAds
-      minimumWait: 60 # Arcades are noisy
+      minimumWait: 60
       maximumWait: 240
     - type: SpeakOnUIClosed
       pack: SpaceVillainGoodbyes
@@ -126,6 +59,6 @@
   parent: ArcadeWhackGame
   suffix: Filled
   components:
-    - type: SpaceVillainArcade
+    - type: ArcadeReward
       rewardMinAmount: 5
       rewardMaxAmount: 8
