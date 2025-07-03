@@ -9,6 +9,7 @@ public sealed partial class WhackGameMenu : DefaultWindow
 {
     private readonly Vector2 _windowSize = new Vector2(450, 300);
     private readonly LocId _windowTitle = "whackgame-menu-title";
+    private BoxContainer? _gameBox;
     public event Action<WhackGamePlayerAction, int?>? OnPlayerAction;
 
     public int TargetCount = 0;
@@ -26,9 +27,31 @@ public sealed partial class WhackGameMenu : DefaultWindow
 
     public void PopulateWindow()
     {
-        PopulatePanels();
+        if (_gameBox == null)
+            CreateGameBox();
+
         PopulateLabels();
         PopulateTargets();
+        PopulatePanels();
+    }
+
+    private void CreateGameBox()
+    {
+        var topMargin = WindowHeader.MinSize.Y;
+        var margin = new Thickness(0f, topMargin, 0f, 0f);
+
+        var box = new BoxContainer()
+        {
+            HorizontalExpand = true,
+            VerticalExpand = true,
+            Orientation = BoxContainer.LayoutOrientation.Vertical,
+            Align = BoxContainer.AlignMode.Center,
+            HorizontalAlignment = HAlignment.Center,
+            Margin = margin,
+        };
+
+        _gameBox = box;
+        AddChild(box);
     }
 
     public void UpdateState(WhackGameArcadeGameUIState state)

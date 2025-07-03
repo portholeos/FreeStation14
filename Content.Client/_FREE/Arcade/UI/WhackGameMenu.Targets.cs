@@ -17,11 +17,13 @@ public sealed partial class WhackGameMenu
         var targetContainer = new GridContainer()
         {
             Columns = _targetsPerRow,
+            HorizontalAlignment = HAlignment.Center,
             HorizontalExpand = true,
+            VerticalExpand = true
         };
 
         _targetContainer = targetContainer;
-        AddChild(targetContainer);
+        _gameBox?.AddChild(targetContainer);
     }
 
     private void PopulateTargets()
@@ -41,10 +43,15 @@ public sealed partial class WhackGameMenu
 
     private Button CreateTarget(int position)
     {
-        var target = new Button();
-        target.SetHeight = 40;
-        target.Disabled = true;
-        target.OnPressed += _ => HitTarget(position);
+        var target = new Button()
+        {
+            MinWidth = _windowSize.X / _targetsPerRow - 10,
+            MinHeight = 80,
+            Disabled = true,
+            HorizontalExpand = true
+        };
+
+        target.OnButtonDown += _ => HitTarget(position);
         _targetContainer?.AddChild(target);
         return target;
     }
@@ -62,15 +69,15 @@ public sealed partial class WhackGameMenu
     {
         for (int i = 0; i < _targets.Count; i++)
         {
-            var inactive = !activeTargets.TryGetValue(i, out var targetData);
+            activeTargets.TryGetValue(i, out var targetData);
             var target = _targets[i];
-            if (target.Disabled != inactive)
-                UpdateTarget(target, targetData);
+            UpdateTarget(target, targetData);
         }
     }
 
     private void UpdateTarget(Button targetButton, WhackTarget? targetData)
     {
-        targetButton.Disabled = targetData != null;
+        // TODO: Interpolate this if it is JUST being changed
+        targetButton.Disabled = targetData == null;
     }
 }

@@ -15,7 +15,7 @@ public sealed partial class WhackGameMenu
         if (_labelContainer == null)
         {
             _labelContainer = new() { HorizontalExpand = true };
-            AddChild(_labelContainer);
+            _gameBox?.AddChild(_labelContainer);
         }
 
         _labelContainer.RemoveAllChildren();
@@ -29,6 +29,7 @@ public sealed partial class WhackGameMenu
         if (_timeLabel == null)
         {
             _timeLabel = CreateLabel();
+            _timeLabel.Align = Label.AlignMode.Right;
             UpdateTime(0);
         }
     }

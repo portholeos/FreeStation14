@@ -43,7 +43,6 @@ public sealed partial class WhackGameMenu
         var box = new BoxContainer()
         {
             HorizontalExpand = true,
-            VerticalExpand = true,
             HorizontalAlignment = HAlignment.Center,
             Align = BoxContainer.AlignMode.Center,
             Orientation = BoxContainer.LayoutOrientation.Vertical,
@@ -58,9 +57,16 @@ public sealed partial class WhackGameMenu
         if (_gameOverPanel == null)
             return;
 
-        var finalScoreTextLabel = new Label() { Text = Loc.GetString(_finalScoreText), };
+        var finalScoreTextLabel = new Label()
+        {
+            Text = Loc.GetString(_finalScoreText),
+            Align = Label.AlignMode.Center,
+        };
 
-        var finalScoreValueLabel = new Label();
+        var finalScoreValueLabel = new Label()
+        {
+            Align = Label.AlignMode.Center,
+        };
 
         var backToMenu = new Button() { Text = Loc.GetString(_backToMenuText), };
         backToMenu.OnPressed += _ => SetPanelState(WhackGameState.MainMenu);
