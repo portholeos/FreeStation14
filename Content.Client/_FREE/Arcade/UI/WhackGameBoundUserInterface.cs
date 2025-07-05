@@ -10,9 +10,7 @@ public sealed class WhackGameBoundUserInterface : BoundUserInterface
     private WhackGameMenu? _menu;
 
     public WhackGameBoundUserInterface(EntityUid owner, Enum uiKey) : base(owner, uiKey)
-    {
-        SendAction(WhackGamePlayerAction.RequestData);
-    }
+    { }
 
     protected override void Open()
     {
