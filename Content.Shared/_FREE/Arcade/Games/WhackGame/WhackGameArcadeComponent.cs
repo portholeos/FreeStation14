@@ -1,5 +1,6 @@
 using Robust.Shared.Audio;
 using Robust.Shared.GameStates;
+using Robust.Shared.Utility;
 
 namespace Content.Shared.FREE.Arcade.Games.WhackGame;
 
@@ -39,6 +40,12 @@ public sealed partial class WhackGameArcadeComponent : Component
     /// </remarks>
     [DataField]
     public bool ValidateOnServer = true;
+
+    /// <summary>
+    ///     The sprite used for targets that are currently inactive.
+    /// </summary>
+    [DataField(required: true)]
+    public SpriteSpecifier EmptyTargetSprite;
 
     /// <summary>
     ///     The sound effect that plays when the game starts.

@@ -6,6 +6,7 @@ using Robust.Client.GameObjects;
 using Robust.Client.ResourceManagement;
 using Robust.Client.UserInterface.Controls;
 using Robust.Shared.Timing;
+using Robust.Shared.Utility;
 
 namespace Content.Client.FREE.Arcade.UI;
 
@@ -16,7 +17,7 @@ public sealed partial class WhackGameMenu
         private readonly IGameTiming _gameTiming;
         private readonly SpriteSystem _spriteSystem;
         private readonly LocId _scoreText = "whackgame-menu-score-indicator";
-        private readonly TimeSpan _hitDuration = TimeSpan.FromSeconds(0.7f);
+        private readonly TimeSpan _hitDuration = TimeSpan.FromSeconds(0.8f);
         private readonly TimeSpan _scoreDuration = TimeSpan.FromSeconds(1.2f);
         private const string ScoreFontPath = "/Fonts/NotoSans/NotoSans-Bold.ttf";
         private const int ScoreFontSize = 16;
@@ -24,15 +25,16 @@ public sealed partial class WhackGameMenu
         private TextureRect _targetTexture;
         private TimeSpan? _hitEndTime;
         private TimeSpan? _scoreEndTime;
+        private SpriteSpecifier? _fallbackSprite;
 
         public WhackTarget? TargetData = null;
         public bool Hit = false;
 
-
-        public WhackButton(SpriteSystem spriteSystem) : base()
+        public WhackButton(SpriteSystem spriteSystem, SpriteSpecifier? fallbackSprite = null) : base()
         {
             _gameTiming = IoCManager.Resolve<IGameTiming>();
             _spriteSystem = spriteSystem;
+            _fallbackSprite = fallbackSprite;
             var resourceCache = IoCManager.Resolve<IResourceCache>();
             var font = resourceCache.GetFont(ScoreFontPath, ScoreFontSize);
 
@@ -42,13 +44,19 @@ public sealed partial class WhackGameMenu
                 VerticalExpand = true,
             };
 
+            if (_fallbackSprite != null)
+                _targetTexture.Texture = _spriteSystem.Frame0(_fallbackSprite);
+
             Label.Align = Label.AlignMode.Center;
             Label.VAlign = Label.VAlignMode.Top;
             Label.FontOverride = font;
             Label.FontColorOverride = Color.Yellow;
             Label.RemoveStyleClass(StyleClassButton);
+            Label.Orphan();
 
             AddChild(_targetTexture);
+            AddChild(Label);
+
             RemoveStyleClass(StyleClassButton);
             UpdateAppearance();
         }
@@ -60,13 +68,13 @@ public sealed partial class WhackGameMenu
             if (Hit && _hitEndTime != null && _gameTiming.CurTime > _hitEndTime)
             {
                 Hit = false;
-                _targetTexture.Texture = null;
+                UpdateTexture();
             }
 
             if (_scoreEndTime != null && _gameTiming.CurTime > _scoreEndTime)
             {
                 _scoreEndTime = null;
-                Label.Visible = false;
+                UpdateScoreLabel();
             }
         }
 
@@ -89,7 +97,7 @@ public sealed partial class WhackGameMenu
             UpdateAppearance();
         }
 
-        private void UpdateAppearance()
+        public void UpdateAppearance()
         {
             UpdateButtonAppearance();
             UpdateTexture();
@@ -108,24 +116,23 @@ public sealed partial class WhackGameMenu
 
         private void UpdateTexture()
         {
-            if (TargetData == null)
+            var spriteToUse = _fallbackSprite;
+            if (TargetData != null)
             {
-                if (!Hit)
-                    _targetTexture.Texture = null;
+                if (Hit)
+                    spriteToUse = TargetData.HitSprite ?? spriteToUse;
+                else
+                    spriteToUse = TargetData.Sprite;
+            }
+
+            // Note that if there is no hit sprite, the target falls back to base sprite.
+            // This is intentional!
+            if (spriteToUse == null)
+            {
+                _targetTexture.Texture = null;
                 return;
             }
 
-            var spriteToUse = TargetData.Sprite;
-            if (Hit)
-                spriteToUse = TargetData.HitSprite;
-
-            // Note that if there is no hit sprite, the target becomes invisible.
-            // This is intentional!
-            if (spriteToUse == null)
-                return;
-
-            Logger.GetSawmill("WhackButton")
-                .Debug($"Button: {GetHashCode()} Hit: {Hit} SpriteToUse: {spriteToUse.GetHashCode()} Time: {_gameTiming.CurTime}");
             var texture = _spriteSystem.Frame0(spriteToUse);
             var scale = MathF.Floor(Size.Y / texture.Width);
             _targetTexture.TextureScale = new Vector2(scale, scale);

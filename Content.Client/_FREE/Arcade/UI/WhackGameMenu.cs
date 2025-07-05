@@ -3,6 +3,7 @@ using Content.Shared.FREE.Arcade.Games.WhackGame;
 using Robust.Client.GameObjects;
 using Robust.Client.UserInterface.Controls;
 using Robust.Client.UserInterface.CustomControls;
+using Robust.Shared.Utility;
 
 namespace Content.Client.FREE.Arcade.UI;
 
@@ -15,6 +16,7 @@ public sealed partial class WhackGameMenu : DefaultWindow
     public event Action<WhackGamePlayerAction, int?, WhackTarget?>? OnPlayerAction;
 
     public int TargetCount = 0;
+    public SpriteSpecifier? EmptyTargetSprite;
 
     public WhackGameMenu()
     {
@@ -83,6 +85,7 @@ public sealed partial class WhackGameMenu : DefaultWindow
         if (_panelState == WhackGameState.Game)
             return;
 
+        UpdateTargetAppearances();
         OnPlayerAction?.Invoke(WhackGamePlayerAction.StartGame, null, null);
     }
 }

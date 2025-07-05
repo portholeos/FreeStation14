@@ -55,7 +55,7 @@ public sealed partial class WhackGameMenu
 
     private WhackButton CreateTarget(int position, Vector2 size)
     {
-        var target = new WhackButton(_spriteSystem)
+        var target = new WhackButton(_spriteSystem, EmptyTargetSprite)
         {
             SetSize = size,
             Disabled = true,
@@ -92,6 +92,8 @@ public sealed partial class WhackGameMenu
 
             if (target.TargetData != targetData)
                 UpdateTarget(target, targetData, isNew);
+            else
+                target.UpdateAppearance();
         }
 
         _lastTargets = activeTargets;
@@ -103,5 +105,11 @@ public sealed partial class WhackGameMenu
             return;
 
         targetButton.SetTarget(targetData, isNew);
+    }
+
+    public void UpdateTargetAppearances()
+    {
+        foreach (var target in _targets)
+            target.UpdateAppearance();
     }
 }

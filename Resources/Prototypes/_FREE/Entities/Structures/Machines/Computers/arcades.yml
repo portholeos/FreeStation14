@@ -22,6 +22,9 @@
       minTargetDuration: 1.1
       maxTargetSpawns: 4
       targetCount: 6
+      emptyTargetSprite:
+        sprite: Structures/Piping/Atmospherics/vent.rsi
+        state: vent_passive
       targets:
         - id: enemy
           sprite:
