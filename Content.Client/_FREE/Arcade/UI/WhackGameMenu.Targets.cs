@@ -1,5 +1,6 @@
-using Content.Client.Stylesheets;
+using System.Numerics;
 using Content.Shared.FREE.Arcade.Games.WhackGame;
+using Robust.Client.GameObjects;
 using Robust.Client.UserInterface.Controls;
 using Robust.Shared.Utility;
 
@@ -7,7 +8,11 @@ namespace Content.Client.FREE.Arcade.UI;
 
 public sealed partial class WhackGameMenu
 {
+    [Dependency] private readonly IEntitySystemManager _entitySystem = default!;
+    private readonly SpriteSystem _spriteSystem;
     private readonly int _targetsPerRow = 3;
+    private readonly int _gapSize = 16;
+    private readonly int _spriteSize = 32;
 
     private GridContainer? _targetContainer;
     private List<WhackButton> _targets = new();
@@ -37,16 +42,19 @@ public sealed partial class WhackGameMenu
         if (TargetCount <= 0)
             return;
 
+        var rows = TargetCount / _targetsPerRow;
+        var heightAvailable = _windowSize.Y / rows - _gapSize;
+        var maxHeight = _spriteSize * MathF.Floor(heightAvailable / _spriteSize);
+
         for (int i = 0; i < TargetCount; i++)
-            _targets.Add(CreateTarget(i));
+            _targets.Add(CreateTarget(i, new Vector2(maxHeight, maxHeight)));
     }
 
-    private WhackButton CreateTarget(int position)
+    private WhackButton CreateTarget(int position, Vector2 size)
     {
-        var target = new WhackButton()
+        var target = new WhackButton(_spriteSystem)
         {
-            MinWidth = _windowSize.X / _targetsPerRow - 10,
-            MinHeight = 80,
+            SetSize = size,
             Disabled = true,
             HorizontalExpand = true
         };
@@ -61,7 +69,7 @@ public sealed partial class WhackGameMenu
         if (!_targets.TryGetValue(position, out var target))
             return;
 
-        UpdateTarget(target, null);
+        target.HitTarget();
         OnPlayerAction?.Invoke(WhackGamePlayerAction.WhackTarget, position, target.TargetData);
     }
 
@@ -71,28 +79,17 @@ public sealed partial class WhackGameMenu
         {
             activeTargets.TryGetValue(i, out var targetData);
             var target = _targets[i];
-            UpdateTarget(target, targetData);
+
+            if (target.TargetData != targetData)
+                UpdateTarget(target, targetData);
         }
     }
 
     private void UpdateTarget(WhackButton targetButton, WhackTarget? targetData)
     {
-        var newValue = targetData == null;
-        if (newValue == targetButton.Disabled)
+        if (targetButton.TargetData == targetData)
             return;
 
-        targetButton.Disabled = newValue;
-
-        if (targetData?.Friendly == true)
-            targetButton.AddStyleClass(StyleNano.StyleClassButtonColorGreen);
-        else
-            targetButton.RemoveStyleClass(StyleNano.StyleClassButtonColorGreen);
-    }
-
-    private sealed class WhackButton : Button
-    {
-        public WhackTarget? TargetData = null;
-
-        public WhackButton() : base() { }
+        targetButton.SetTarget(targetData);
     }
 }

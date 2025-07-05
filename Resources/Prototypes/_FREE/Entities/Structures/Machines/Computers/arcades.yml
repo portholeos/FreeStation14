@@ -24,15 +24,18 @@
       targetCount: 6
       targets:
         - sprite:
-            sprite: Structures/Machines/arcade.rsi
+            sprite: Mobs/Aliens/Carps/holo.rsi
             state: icon
+          hitSprite:
+            sprite: Mobs/Aliens/Carps/holo.rsi
+            state: dead
           score: 1
           friendly: false
           bonkSound:
             collection:
               WhackGameHitEnemy
         - sprite:
-            sprite: Structures/Machines/arcade.rsi
+            sprite: Mobs/Aliens/Carps/magic.rsi
             state: icon
           score: -1
           friendly: true

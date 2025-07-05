@@ -1,5 +1,6 @@
 using System.Numerics;
 using Content.Shared.FREE.Arcade.Games.WhackGame;
+using Robust.Client.GameObjects;
 using Robust.Client.UserInterface.Controls;
 using Robust.Client.UserInterface.CustomControls;
 
@@ -18,13 +19,15 @@ public sealed partial class WhackGameMenu : DefaultWindow
     public WhackGameMenu()
     {
         IoCManager.InjectDependencies(this);
+        _spriteSystem = _entitySystem.GetEntitySystem<SpriteSystem>();
+
         InitializeWindowProperties();
     }
 
     private void InitializeWindowProperties()
     {
         Title = Loc.GetString(_windowTitle);
-        MinSize = SetSize = _windowSize;
+        MinSize = SetSize = MaxSize = _windowSize;
         _topBarHeight = WindowHeader.MinSize.Y;
     }
 
