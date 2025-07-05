@@ -54,6 +54,9 @@ public sealed partial class WhackGameData
         if (!_currentTargets.TryGetValue(position, out var targetData))
             return;
 
+        PlaySound(Comp.BonkSound);
+        PlaySound(targetData.Item1.BonkSound);
+
         Score += targetData.Item1.Score;
         RemoveTarget(position);
         UpdateUI();

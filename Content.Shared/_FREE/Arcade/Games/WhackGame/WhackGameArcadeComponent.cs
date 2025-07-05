@@ -1,3 +1,4 @@
+using Robust.Shared.Audio;
 using Robust.Shared.GameStates;
 
 namespace Content.Shared.FREE.Arcade.Games.WhackGame;
@@ -21,6 +22,43 @@ public sealed partial class WhackGameArcadeComponent : Component
     /// </summary>
     [DataField(required: true)]
     public List<WhackTarget> Targets = new();
+
+    /// <summary>
+    ///     The sound effect that plays when the game starts.
+    /// </summary>
+    [DataField]
+    public SoundSpecifier? NewGameSound;
+
+    /// <summary>
+    ///     The sound effect that plays when the player hits an enemy.
+    /// </summary>
+    /// <remarks>
+    ///     This happens in addition to the "hit" sound that each individual Target can have.
+    /// </remarks>
+    [DataField]
+    public SoundSpecifier? BonkSound;
+
+    /// <summary>
+    ///     The sound effect that plays when the game is "won", and a prize is dispensed.
+    /// </summary>
+    [DataField]
+    public SoundSpecifier? WinSound;
+
+    /// <summary>
+    ///     The sound effect that plays when the game finishes without fulfilling the win condition.
+    /// </summary>
+    /// <remarks>
+    ///     There is not an actual "lose" state in the game, so this sound is more like the default
+    ///     Game Finished sound, and the win sound is a "You won a prize!" sound.
+    /// </remarks>
+    [DataField]
+    public SoundSpecifier? GameOverSound;
+
+    /// <summary>
+    ///     The volume of all arcade sounds should play, in dB.
+    /// </summary>
+    [DataField]
+    public float SoundVolume = -4f;
 
     /// <summary>
     ///     A float ranging from 0.0 to 1.0, representing the "performance" % you need to win the game.

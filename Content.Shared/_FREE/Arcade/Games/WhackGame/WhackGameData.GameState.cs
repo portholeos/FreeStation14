@@ -1,12 +1,17 @@
 using System.Linq;
+using Robust.Shared.Audio;
+using Robust.Shared.Audio.Systems;
 using Robust.Shared.Timing;
 
 namespace Content.Shared.FREE.Arcade.Games.WhackGame;
 
 public sealed partial class WhackGameData
 {
+    [Dependency] private readonly IEntityManager _entityManager = default!;
     [Dependency] private readonly IGameTiming _timing = default!;
+    private readonly SharedAudioSystem _audioSystem = default!;
 
+    private readonly EntityUid _machineID;
     public readonly WhackGameArcadeComponent Comp;
 
     /// <summary>
@@ -42,16 +47,26 @@ public sealed partial class WhackGameData
 
     public event Action<WhackGameArcadeGameUIState>? OnUIUpdate;
 
-    public WhackGameData(WhackGameArcadeComponent component)
+    public WhackGameData(Entity<WhackGameArcadeComponent> entity)
     {
         IoCManager.InjectDependencies(this);
+        _audioSystem = _entityManager.System<SharedAudioSystem>();
 
-        Comp = component;
+        _machineID = entity.Owner;
+        Comp = entity.Comp;
 
         Difficulty = Comp.StartingDifficulty;
         EndTime = _timing.CurTime + Comp.GameDuration;
 
         InitializeTargets();
+    }
+
+    /// <summary>
+    ///     Starts the game "officially" - in this case, it just plays the new game sound.
+    /// </summary>
+    public void StartGame()
+    {
+        PlaySound(Comp.NewGameSound);
     }
 
     /// <summary>
@@ -86,9 +101,13 @@ public sealed partial class WhackGameData
 
     public void EndGame()
     {
+        GameEnded = true;
+
         foreach (var (pos, _) in _currentTargets)
             RemoveTarget(pos);
-        GameEnded = true;
+
+        var sound = GetPerformance() > Comp.WinThreshold ? Comp.WinSound : Comp.GameOverSound;
+        PlaySound(sound);
     }
 
     public float GetPerformance()
@@ -113,5 +132,11 @@ public sealed partial class WhackGameData
         );
 
         return state;
+    }
+
+    private void PlaySound(SoundSpecifier? sound)
+    {
+        if (sound != null)
+            _audioSystem.PlayPvs(sound, _machineID, AudioParams.Default.WithVolume(Comp.SoundVolume));
     }
 }

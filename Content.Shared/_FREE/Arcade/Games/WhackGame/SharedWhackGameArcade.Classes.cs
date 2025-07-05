@@ -1,3 +1,4 @@
+using Robust.Shared.Audio;
 using Robust.Shared.Serialization;
 using Robust.Shared.Utility;
 
@@ -23,6 +24,12 @@ public partial record WhackTarget
     /// </summary>
     [DataField]
     public SpriteSpecifier? HitSprite = null;
+
+    /// <summary>
+    ///     The sound effect that plays when this target is hit.
+    /// </summary>
+    [DataField]
+    public SoundSpecifier? BonkSound;
 
     /// <summary>
     ///     Whether this target is considered a "friend" (i.e. you should not hit it.)
