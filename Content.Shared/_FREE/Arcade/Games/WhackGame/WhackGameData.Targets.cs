@@ -42,6 +42,9 @@ public sealed partial class WhackGameData
     {
         _availablePositions = Enumerable.Range(0, Comp.TargetCount).ToList();
         UpdateTargetDifficulty();
+
+        // Give it a few seconds before spawning the first one
+        NextTargetSpawn = _timing.CurTime + TargetFrequency;
     }
 
     public void HitTarget(int position)
