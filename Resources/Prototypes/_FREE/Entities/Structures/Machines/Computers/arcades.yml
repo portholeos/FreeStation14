@@ -19,7 +19,7 @@
       # Difficulty variables - fine-tuned based on gameplay observations
       friendChanceIncreaseStart: 15
       difficultyCurveEnd: 60
-      minTargetDuration: 1.2
+      minTargetDuration: 1.1
       maxTargetSpawns: 4
       targetCount: 6
       targets:
