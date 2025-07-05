@@ -23,7 +23,8 @@
       maxTargetSpawns: 4
       targetCount: 6
       targets:
-        - sprite:
+        - id: enemy
+          sprite:
             sprite: Mobs/Aliens/Carps/holo.rsi
             state: icon
           hitSprite:
@@ -32,16 +33,18 @@
           score: 1
           friendly: false
           bonkSound:
-            collection:
-              WhackGameHitEnemy
-        - sprite:
+            collection: WhackGameHitEnemy
+        - id: friend
+          sprite:
             sprite: Mobs/Aliens/Carps/magic.rsi
             state: icon
+          hitSprite:
+            sprite: Mobs/Aliens/Carps/magic.rsi
+            state: dead
           score: -1
           friendly: true
           bonkSound:
-            collection:
-              WhackGameHitFriendly
+            collection: WhackGameHitFriendly
       bonkSound:
         collection: WhackGameHit
       newGameSound:

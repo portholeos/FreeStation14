@@ -8,6 +8,12 @@ namespace Content.Shared.FREE.Arcade.Games.WhackGame;
 public partial record WhackTarget
 {
     /// <summary>
+    ///     An identifier for this target. Used for comparisons.
+    /// </summary>
+    [DataField("id", required: true)]
+    public string ID;
+
+    /// <summary>
     ///     The sprite this target uses.
     /// </summary>
     [DataField(required: true)]

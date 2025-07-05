@@ -76,17 +76,15 @@ public sealed partial class WhackGameMenu
         public void HitTarget()
         {
             Hit = true;
-            UpdateAppearance();
-
             _hitEndTime = _gameTiming.CurTime + _hitDuration;
             _scoreEndTime = _gameTiming.CurTime + _scoreDuration;
 
-            SetTarget(null);
+            UpdateAppearance();
         }
 
-        public void SetTarget(WhackTarget? targetData)
+        public void SetTarget(WhackTarget? targetData, bool isNew = false)
         {
-            if (targetData != null)
+            if (Hit && isNew)
                 Hit = false;
 
             TargetData = targetData;
@@ -128,6 +126,8 @@ public sealed partial class WhackGameMenu
             if (spriteToUse == null)
                 return;
 
+            Logger.GetSawmill("WhackButton")
+                .Debug($"Button: {GetHashCode()} Hit: {Hit} SpriteToUse: {spriteToUse.GetHashCode()} Time: {_gameTiming.CurTime}");
             var texture = _spriteSystem.Frame0(spriteToUse);
             var scale = MathF.Floor(Size.Y / texture.Width);
             _targetTexture.TextureScale = new Vector2(scale, scale);

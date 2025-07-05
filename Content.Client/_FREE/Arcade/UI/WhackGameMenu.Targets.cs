@@ -1,3 +1,4 @@
+using System.Linq;
 using System.Numerics;
 using Content.Shared.FREE.Arcade.Games.WhackGame;
 using Robust.Client.GameObjects;
@@ -11,11 +12,13 @@ public sealed partial class WhackGameMenu
     [Dependency] private readonly IEntitySystemManager _entitySystem = default!;
     private readonly SpriteSystem _spriteSystem;
     private readonly int _targetsPerRow = 3;
-    private readonly int _gapSize = 16;
+    private readonly int _gapSize = 32;
     private readonly int _spriteSize = 32;
 
     private GridContainer? _targetContainer;
     private List<WhackButton> _targets = new();
+    private Dictionary<int, WhackTarget> _lastTargets = new();
+
 
     private void InitiateTargets()
     {
@@ -56,7 +59,9 @@ public sealed partial class WhackGameMenu
         {
             SetSize = size,
             Disabled = true,
-            HorizontalExpand = true
+            HorizontalExpand = true,
+            HorizontalAlignment = HAlignment.Center,
+            VerticalAlignment = VAlignment.Top,
         };
 
         target.OnButtonDown += _ => HitTarget(position);
@@ -75,21 +80,28 @@ public sealed partial class WhackGameMenu
 
     private void UpdateTargets(Dictionary<int, WhackTarget> activeTargets)
     {
+        var newTargets = activeTargets.Where(t => !(_lastTargets.TryGetValue(t.Key, out var v)
+            && t.Value.ID == v.ID))
+            .ToDictionary();
+
         for (int i = 0; i < _targets.Count; i++)
         {
             activeTargets.TryGetValue(i, out var targetData);
             var target = _targets[i];
+            var isNew = newTargets.TryGetValue(i, out var _);
 
             if (target.TargetData != targetData)
-                UpdateTarget(target, targetData);
+                UpdateTarget(target, targetData, isNew);
         }
+
+        _lastTargets = activeTargets;
     }
 
-    private void UpdateTarget(WhackButton targetButton, WhackTarget? targetData)
+    private void UpdateTarget(WhackButton targetButton, WhackTarget? targetData, bool isNew = false)
     {
         if (targetButton.TargetData == targetData)
             return;
 
-        targetButton.SetTarget(targetData);
+        targetButton.SetTarget(targetData, isNew);
     }
 }
