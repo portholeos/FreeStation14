@@ -10,7 +10,7 @@ public sealed partial class WhackGameMenu
     private readonly int _targetsPerRow = 3;
 
     private GridContainer? _targetContainer;
-    private List<Button> _targets = new();
+    private List<WhackButton> _targets = new();
 
     private void InitiateTargets()
     {
@@ -41,9 +41,9 @@ public sealed partial class WhackGameMenu
             _targets.Add(CreateTarget(i));
     }
 
-    private Button CreateTarget(int position)
+    private WhackButton CreateTarget(int position)
     {
-        var target = new Button()
+        var target = new WhackButton()
         {
             MinWidth = _windowSize.X / _targetsPerRow - 10,
             MinHeight = 80,
@@ -62,7 +62,7 @@ public sealed partial class WhackGameMenu
             return;
 
         UpdateTarget(target, null);
-        OnPlayerAction?.Invoke(WhackGamePlayerAction.WhackTarget, position);
+        OnPlayerAction?.Invoke(WhackGamePlayerAction.WhackTarget, position, target.TargetData);
     }
 
     private void UpdateTargets(Dictionary<int, WhackTarget> activeTargets)
@@ -75,7 +75,7 @@ public sealed partial class WhackGameMenu
         }
     }
 
-    private void UpdateTarget(Button targetButton, WhackTarget? targetData)
+    private void UpdateTarget(WhackButton targetButton, WhackTarget? targetData)
     {
         var newValue = targetData == null;
         if (newValue == targetButton.Disabled)
@@ -87,5 +87,12 @@ public sealed partial class WhackGameMenu
             targetButton.AddStyleClass(StyleNano.StyleClassButtonColorGreen);
         else
             targetButton.RemoveStyleClass(StyleNano.StyleClassButtonColorGreen);
+    }
+
+    private sealed class WhackButton : Button
+    {
+        public WhackTarget? TargetData = null;
+
+        public WhackButton() : base() { }
     }
 }

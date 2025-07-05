@@ -40,10 +40,12 @@ public partial record WhackTarget
 
 [Serializable, NetSerializable]
 public sealed class WhackGameArcadePlayerActionMessage(WhackGamePlayerAction action,
-    int? target = null) : BoundUserInterfaceMessage
+    int? target = null,
+    WhackTarget? targetData = null) : BoundUserInterfaceMessage
 {
     public readonly WhackGamePlayerAction Action = action;
     public readonly int? Target = target;
+    public readonly WhackTarget? TargetData = targetData;
 }
 
 [Serializable, NetSerializable]

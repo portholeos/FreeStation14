@@ -14,14 +14,31 @@ public sealed partial class WhackGameArcadeComponent : Component
     [AutoNetworkedField, DataField]
     public int TargetCount = 6;
 
-    [ViewVariables, Access(typeof(SharedWhackGameArcadeSystem), Friend = AccessPermissions.ReadWriteExecute)]
+    [ViewVariables]
+    [Access(typeof(SharedWhackGameArcadeSystem), Friend = AccessPermissions.ReadWriteExecute)]
     public WhackGameData? Game = null;
 
     /// <summary>
     ///     List of all possible targets that can spawn.
     /// </summary>
     [DataField(required: true)]
+    [Access(typeof(WhackGameData), Friend = AccessPermissions.ReadWriteExecute)]
     public List<WhackTarget> Targets = new();
+
+    /// <summary>
+    ///     Whether or not "game target hit" logic should be validated on the server.
+    ///     Even if this is disabled, the server will still check if the target
+    ///     data is valid, so clients can't just claim they hit a Target That Gives You
+    ///     10000 Points
+    /// </summary>
+    /// <remarks>
+    ///     Note that if this is enabled, players may be screwed over by lag, as the server
+    ///     may receive client messages *after* targets get hidden. Disabling this
+    ///     basically eliminates the lag issue, so it may be desirable if you're willing
+    ///     to run the risk at people exploiting at fucking Whack-a-Mole
+    /// </remarks>
+    [DataField]
+    public bool ValidateOnServer = true;
 
     /// <summary>
     ///     The sound effect that plays when the game starts.

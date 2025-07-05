@@ -11,7 +11,7 @@ public sealed partial class WhackGameMenu : DefaultWindow
     private readonly LocId _windowTitle = "whackgame-menu-title";
     private BoxContainer? _gameBox;
     private float _topBarHeight;
-    public event Action<WhackGamePlayerAction, int?>? OnPlayerAction;
+    public event Action<WhackGamePlayerAction, int?, WhackTarget?>? OnPlayerAction;
 
     public int TargetCount = 0;
 
@@ -80,7 +80,7 @@ public sealed partial class WhackGameMenu : DefaultWindow
         if (_panelState == WhackGameState.Game)
             return;
 
-        OnPlayerAction?.Invoke(WhackGamePlayerAction.StartGame, null);
+        OnPlayerAction?.Invoke(WhackGamePlayerAction.StartGame, null, null);
     }
 }
 

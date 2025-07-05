@@ -47,19 +47,43 @@ public sealed partial class WhackGameData
         NextTargetSpawn = _timing.CurTime + TargetFrequency;
     }
 
-    public void HitTarget(int position)
+    public void HitTarget(int position, WhackTarget? clientTargetData = null)
     {
         if (GameEnded)
             return;
-        if (!_currentTargets.TryGetValue(position, out var targetData))
+
+        var targetData = GetTargetData(position, clientTargetData);
+        if (targetData == null)
             return;
 
         PlaySound(Comp.BonkSound);
-        PlaySound(targetData.Item1.BonkSound);
+        PlaySound(targetData.BonkSound);
 
-        Score += targetData.Item1.Score;
+        Score += targetData.Score;
         RemoveTarget(position);
         UpdateUI();
+    }
+
+    private WhackTarget? GetTargetData(int position, WhackTarget? clientTargetData = null)
+    {
+        var targetData = clientTargetData;
+
+        if (_currentTargets.TryGetValue(position, out var target))
+        {
+            targetData = target.Item1;
+        }
+        else
+        {
+            // No valid server data, meaning the target data is invalid
+            if (Comp.ValidateOnServer)
+                return null;
+        }
+
+        // Validate that the target data is even real
+        if (targetData != null && !Comp.Targets.Contains(targetData))
+            return null;
+
+        return targetData;
     }
 
     /// <summary>

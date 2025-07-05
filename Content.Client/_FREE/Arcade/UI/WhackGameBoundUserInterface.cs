@@ -36,9 +36,9 @@ public sealed class WhackGameBoundUserInterface : BoundUserInterface
             _menu?.UpdateState(arcadeState);
     }
 
-    private void SendAction(WhackGamePlayerAction action, int? target = null)
+    private void SendAction(WhackGamePlayerAction action, int? target = null, WhackTarget? targetData = null)
     {
-        var actionMessage = new WhackGameArcadePlayerActionMessage(action, target);
+        var actionMessage = new WhackGameArcadePlayerActionMessage(action, target, targetData);
         SendMessage(actionMessage);
     }
 }

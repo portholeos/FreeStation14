@@ -81,7 +81,7 @@ public sealed partial class WhackGameArcadeSystem : SharedWhackGameArcadeSystem
                         || args.Target >= ent.Comp.TargetCount)
                         break;
 
-                    ent.Comp.Game.HitTarget(args.Target.Value);
+                    ent.Comp.Game.HitTarget(args.Target.Value, args.TargetData);
                     break;
                 }
             case WhackGamePlayerAction.RequestData:
