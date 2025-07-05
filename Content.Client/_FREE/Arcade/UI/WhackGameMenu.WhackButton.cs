@@ -16,13 +16,12 @@ public sealed partial class WhackGameMenu
         private readonly IGameTiming _gameTiming;
         private readonly SpriteSystem _spriteSystem;
         private readonly LocId _scoreText = "whackgame-menu-score-indicator";
-        private readonly TimeSpan _hitDuration = TimeSpan.FromSeconds(0.8f);
-        private readonly TimeSpan _scoreDuration = TimeSpan.FromSeconds(2.0f);
-        private const string ScoreFontPath = "/Fonts/NotoSans/NotoSans-Regular.ttf";
+        private readonly TimeSpan _hitDuration = TimeSpan.FromSeconds(0.7f);
+        private readonly TimeSpan _scoreDuration = TimeSpan.FromSeconds(1.2f);
+        private const string ScoreFontPath = "/Fonts/NotoSans/NotoSans-Bold.ttf";
         private const int ScoreFontSize = 16;
 
         private TextureRect _targetTexture;
-        private Label _scoreLabel;
         private TimeSpan? _hitEndTime;
         private TimeSpan? _scoreEndTime;
 
@@ -43,15 +42,13 @@ public sealed partial class WhackGameMenu
                 VerticalExpand = true,
             };
 
-            _scoreLabel = new Label()
-            {
-                Align = Label.AlignMode.Center,
-                VAlign = Label.VAlignMode.Top,
-                FontOverride = font,
-            };
+            Label.Align = Label.AlignMode.Center;
+            Label.VAlign = Label.VAlignMode.Top;
+            Label.FontOverride = font;
+            Label.FontColorOverride = Color.Yellow;
+            Label.RemoveStyleClass(StyleClassButton);
 
             AddChild(_targetTexture);
-            AddChild(_scoreLabel);
             RemoveStyleClass(StyleClassButton);
             UpdateAppearance();
         }
@@ -69,7 +66,7 @@ public sealed partial class WhackGameMenu
             if (_scoreEndTime != null && _gameTiming.CurTime > _scoreEndTime)
             {
                 _scoreEndTime = null;
-                _scoreLabel.Visible = false;
+                Label.Visible = false;
             }
         }
 
@@ -79,7 +76,8 @@ public sealed partial class WhackGameMenu
             _hitEndTime = _gameTiming.CurTime + _hitDuration;
             _scoreEndTime = _gameTiming.CurTime + _scoreDuration;
 
-            UpdateAppearance();
+            UpdateButtonAppearance();
+            UpdateTexture();
         }
 
         public void SetTarget(WhackTarget? targetData, bool isNew = false)
@@ -134,16 +132,22 @@ public sealed partial class WhackGameMenu
             _targetTexture.Texture = texture;
         }
 
+        /// <remarks>
+        ///     The UX of this can be inconsistent or slow depending on server latency.
+        ///     If it's really bad you might want to consider disabling validateOnServer in the
+        ///     component.
+        /// </remarks>
         private void UpdateScoreLabel()
         {
+            Label.Visible = Hit && _scoreEndTime != null && _gameTiming.CurTime <= _scoreEndTime;
             if (TargetData == null)
                 return;
 
             var text = Loc.GetString(_scoreText, ("score", TargetData.Score));
 
-            _scoreLabel.SetWidth = Size.X;
-            _scoreLabel.Text = text;
-            _scoreLabel.Visible = _scoreEndTime != null && _gameTiming.CurTime <= _scoreEndTime;
+            Label.SetWidth = Size.X;
+            Label.Margin = new Thickness(0, -Size.Y / 2, 0, 0);
+            Label.Text = text;
         }
     }
 }
