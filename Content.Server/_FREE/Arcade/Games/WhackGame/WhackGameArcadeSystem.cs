@@ -45,9 +45,9 @@ public sealed partial class WhackGameArcadeSystem : SharedWhackGameArcadeSystem
             return;
 
         game.EndGame();
-        var performance = game.GetPerformance();
 
-        if (performance >= 0.65f) // C's get degrees
+        var performance = game.GetPerformance();
+        if (performance >= ent.Comp.WinThreshold)
             _arcade.WinGame(null, ent.Owner);
 
         game.UpdateUI(true);
@@ -66,10 +66,11 @@ public sealed partial class WhackGameArcadeSystem : SharedWhackGameArcadeSystem
                     if (ent.Comp.Game != null)
                         break;
 
-                    var newGame = new WhackGameData(ent.Comp);
+                    var newGame = new WhackGameData(ent);
                     ent.Comp.Game = newGame;
                     newGame.OnUIUpdate += s => UpdateState(ent, s);
                     newGame.UpdateUI();
+                    newGame.StartGame();
                     break;
                 }
             case WhackGamePlayerAction.WhackTarget:

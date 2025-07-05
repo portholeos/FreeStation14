@@ -22,6 +22,18 @@ public sealed partial class WhackGameArcadeComponent : Component
     [DataField(required: true)]
     public List<WhackTarget> Targets = new();
 
+    /// <summary>
+    ///     A float ranging from 0.0 to 1.0, representing the "performance" % you need to win the game.
+    /// </summary>
+    /// <remarks>
+    ///     Performance is represented as points earned divided by the maximum "possible" number of points
+    ///     you can get. When I was testing it, I averaged 70%-75% score when I was "tryharding" and the
+    ///     win threshold probably shouldn't be much higher than that unless you adjust the difficulty of
+    ///     the game in general, or want the game to be much harder to win.
+    /// </remarks>
+    [DataField]
+    public float WinThreshold = 0.65f; // C's get degrees
+
     // How long a game session lasts.
     [DataField]
     public TimeSpan GameDuration = TimeSpan.FromSeconds(90);
