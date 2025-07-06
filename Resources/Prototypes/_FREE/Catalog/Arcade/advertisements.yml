@@ -1,0 +1,5 @@
+- type: localizedDataset
+  id: WhackGameAds
+  values:
+    prefix: advertisement-whack-game-
+    count: 16

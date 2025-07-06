@@ -1,5 +1,7 @@
+using Content.Server.Advertise.EntitySystems;
 using Content.Server.FREE.Arcade.Systems;
 using Content.Server.Power.Components;
+using Content.Shared.Advertise.Components;
 using Content.Shared.FREE.Arcade.Games.WhackGame;
 using Content.Shared.Power;
 using Robust.Server.GameObjects;
@@ -8,6 +10,7 @@ namespace Content.Server.FREE.Arcade.Games.WhackGame;
 
 public sealed partial class WhackGameArcadeSystem : SharedWhackGameArcadeSystem
 {
+    [Dependency] private readonly SpeakOnUIClosedSystem _speakOnUIClosed = default!;
     [Dependency] private readonly UserInterfaceSystem _uiSystem = default!;
     [Dependency] private readonly ArcadeSystem _arcade = default!;
 
@@ -58,6 +61,10 @@ public sealed partial class WhackGameArcadeSystem : SharedWhackGameArcadeSystem
     {
         if (!IsPowered(ent))
             return;
+
+        if (args.Action != WhackGamePlayerAction.RequestData
+            && TryComp<SpeakOnUIClosedComponent>(ent.Owner, out var speak))
+            _speakOnUIClosed.TrySetFlag((ent.Owner, speak));
 
         switch (args.Action)
         {

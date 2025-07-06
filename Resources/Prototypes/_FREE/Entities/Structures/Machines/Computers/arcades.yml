@@ -74,11 +74,11 @@
     # - type: Computer
     #   board: SpaceVillainArcadeComputerCircuitboard
     - type: Advertise
-      pack: SpaceVillainAds
+      pack: WhackGameAds
       minimumWait: 60
       maximumWait: 240
     - type: SpeakOnUIClosed
-      pack: SpaceVillainGoodbyes
+      pack: WhackGameGoodbyes
 
 - type: entity
   id: ArcadeWhackGameFilled
