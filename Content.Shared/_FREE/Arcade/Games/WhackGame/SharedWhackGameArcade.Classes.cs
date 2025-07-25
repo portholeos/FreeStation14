@@ -42,6 +42,23 @@ public partial record WhackTarget
     /// </summary>
     [DataField]
     public bool Friendly = false;
+
+    public virtual bool Equals(WhackTarget? obj)
+    {
+        if (obj is not WhackTarget other)
+            return false;
+
+        return ID == other.ID
+            && Score == other.Score
+            && Sprite == other.Sprite
+            && HitSprite == other.HitSprite
+            && Friendly == other.Friendly;
+    }
+
+    public override int GetHashCode()
+    {
+        return HashCode.Combine(ID, Score, Sprite, HitSprite, Friendly);
+    }
 }
 
 [Serializable, NetSerializable]
