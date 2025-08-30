@@ -1,0 +1,90 @@
+- type: entity
+  id: ArcadeWhackGame
+  name: bonk-a-critter arcade
+  parent: ArcadeBase
+  components:
+    - type: Sprite
+      sprite: Structures/Machines/arcade.rsi
+      layers:
+        - map: ["computerLayerBody"]
+          state: arcade
+        - map: ["computerLayerScreen"]
+          state: screen_spacevillain
+        - map: ["enum.WiresVisualLayers.MaintenancePanel"]
+          state: panel
+          visible: false
+    - type: PointLight
+      color: "#e3a136"
+    - type: WhackGameArcade
+      # Difficulty variables - fine-tuned based on gameplay observations
+      friendChanceIncreaseStart: 15
+      difficultyCurveEnd: 60
+      minTargetDuration: 1.1
+      maxTargetSpawns: 4
+      targetCount: 6
+      emptyTargetSprite:
+        sprite: Structures/Piping/Atmospherics/vent.rsi
+        state: vent_passive
+      targets:
+        - id: enemy
+          sprite:
+            sprite: Mobs/Aliens/Carps/holo.rsi
+            state: icon
+          hitSprite:
+            sprite: Mobs/Aliens/Carps/holo.rsi
+            state: dead
+          score: 1
+          friendly: false
+          bonkSound:
+            collection: WhackGameHitEnemy
+        - id: friend
+          sprite:
+            sprite: Mobs/Aliens/Carps/magic.rsi
+            state: icon
+          hitSprite:
+            sprite: Mobs/Aliens/Carps/magic.rsi
+            state: dead
+          score: -1
+          friendly: true
+          bonkSound:
+            collection: WhackGameHitFriendly
+      bonkSound:
+        collection: WhackGameHit
+      newGameSound:
+        path: /Audio/Effects/Arcade/newgame.ogg
+      winSound:
+        path: /Audio/Effects/Arcade/win.ogg
+    - type: ArcadeReward
+      possibleRewards: !type:NestedSelector
+        tableId: AllPlushiesTable
+    - type: WiresPanel
+    - type: Wires
+      layoutId: Arcade
+      boardName: wires-board-name-arcade
+    - type: ActivatableUI
+      key: enum.WhackGameArcadeUiKey.Key
+    - type: ActivatableUIRequiresPower
+    - type: StationAiWhitelist
+    - type: UserInterface
+      interfaces:
+        enum.WhackGameArcadeUiKey.Key:
+          type: WhackGameBoundUserInterface
+        enum.WiresUiKey.Key:
+          type: WiresBoundUserInterface
+    # - type: Computer
+    #   board: SpaceVillainArcadeComputerCircuitboard
+    - type: Advertise
+      pack: WhackGameAds
+      minimumWait: 60
+      maximumWait: 240
+    - type: SpeakOnUIClosed
+      pack: WhackGameGoodbyes
+
+- type: entity
+  id: ArcadeWhackGameFilled
+  parent: ArcadeWhackGame
+  suffix: Filled
+  components:
+    - type: ArcadeReward
+      rewardMinAmount: 5
+      rewardMaxAmount: 8

@@ -4,11 +4,13 @@ using Content.Shared.Arcade;
 using Robust.Shared.Utility;
 using Robust.Server.GameObjects;
 using Robust.Server.Player;
+using Content.Shared.FREE.Arcade.Systems;
 
 namespace Content.Server.Arcade
 {
     // ReSharper disable once ClassNeverInstantiated.Global
-    public sealed partial class ArcadeSystem : EntitySystem
+    // FREE: Inherit from Shared.
+    public abstract partial class ArcadeSystem : SharedArcadeSystem
     {
         private readonly List<BlockGameMessages.HighScoreEntry> _roundHighscores = new();
         private readonly List<BlockGameMessages.HighScoreEntry> _globalHighscores = new();

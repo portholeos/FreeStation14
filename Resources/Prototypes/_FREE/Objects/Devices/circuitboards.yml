@@ -1,0 +1,8 @@
+- type: entity
+  parent: BaseComputerCircuitboard
+  id: ArcadeWhackGameComputerCircuitboard
+  name: whacker game arcade board
+  description: A computer printed circuit board for a whacker game arcade cabinet.
+  components:
+    - type: ComputerBoard
+      prototype: ArcadeWhackGame

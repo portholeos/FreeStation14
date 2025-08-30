@@ -1,0 +1,5 @@
+- type: localizedDataset
+  id: WhackGameGoodbyes
+  values:
+    prefix: thankyou-whack-game-
+    count: 12
