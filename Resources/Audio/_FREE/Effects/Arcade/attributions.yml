@@ -1,0 +1,4 @@
+- files: ["hit.ogg", "hit_enemy.ogg", "hit_friendly.ogg"]
+  license: "CC0-1.0"
+  copyright: 'Programmatically synthesized in rFXGen.'
+  source: "https://raylibtech.itch.io/rfxgen"

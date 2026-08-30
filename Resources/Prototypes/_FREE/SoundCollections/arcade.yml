@@ -1,0 +1,14 @@
+- type: soundCollection
+  id: WhackGameHit
+  files:
+    - /Audio/_FREE/Effects/Arcade/hit.ogg
+
+- type: soundCollection
+  id: WhackGameHitFriendly
+  files:
+    - /Audio/_FREE/Effects/Arcade/hit_friendly.ogg
+
+- type: soundCollection
+  id: WhackGameHitEnemy
+  files:
+    - /Audio/_FREE/Effects/Arcade/hit_enemy.ogg
